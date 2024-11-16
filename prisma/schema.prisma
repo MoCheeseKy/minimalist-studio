@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  Pria
+  Perempuan
+}
+
+model User{
+  id          String  @id @unique @default(uuid())
+  fullname    String
+  email       String  @unique
+  password    String
+  gender      Gender 
+  instagram   String
+  birth_date  DateTime
+  quota       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user_class  User_Class[]
+}
+
+model Studio {
+  id          String @id @unique @default(uuid())
+  name        String 
+  capacity    Int
+  location    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  class       Class[]
+}
+
+model Class_Category{
+  id          Int @id @unique @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  class       Class[]
+}
+
+model Class{
+  id            String @id @unique @default(uuid())
+  category      Class_Category @relation(fields:[category_id], references: [id])
+  category_id   Int
+  studio        Studio @relation(fields: [studio_id], references: [id])
+  studio_id     String
+  start_at      DateTime
+  end_at        DateTime
+  description   String
+  instructor    String  
+  current_slot  Int
+  max_slot      Int
+  req_quota     Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user_class    User_Class?
+}
+
+model User_Class{
+  class       Class @relation(fields: [class_id], references: [id])
+  class_id    String @id @unique
+  user        User  @relation(fields: [user_id], references: [id])
+  user_id     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
