@@ -1,16 +1,17 @@
+import { respond } from '@/utils/resJson'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {responseJson} from '../res.interface'
-
  
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<responseJson>
+  res: NextApiResponse
 ) {
     try {
-        if(req.method != 'POST') res.status(200).json({status: 405, message:"Method Not Allowed", isError:false, data: "no Data"})
+        if(req.method != 'POST'){
+          respond(405, true, "Method Forbidden", null, res);
+        }
         const {phone_num, password} = req.body
-        console.log(req.body)
-        res.status(200).json(req.body)
+        
+        // respond(200, false, "Success", )
     } catch (error) {
         
     }
