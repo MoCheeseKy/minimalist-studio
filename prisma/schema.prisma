@@ -14,8 +14,8 @@ datasource db {
 }
 
 enum Gender {
-  Pria
-  Perempuan
+  PRIA
+  WANITA
 }
 
 model User{
