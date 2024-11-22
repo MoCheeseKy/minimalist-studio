@@ -20,7 +20,7 @@ enum Gender {
 
 model User{
   id          String  @id @unique @default(uuid())
-  phone_num   Int     @unique
+  phone_num   String    @unique
   fullname    String
   email       String  @unique
   password    String
