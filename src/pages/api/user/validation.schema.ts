@@ -1,13 +1,17 @@
 import Joi from "joi";
 
+// Register  Request Body Validation
 export const registerValidSchema = Joi.object({
     phone_num: Joi.string()
     .label('Nomor Telepon')
     .pattern(/^\+628/)
     .min(7)   //phone must start with +628, min 7
+    .max(15)
     .required()
     .messages({
         'string.pattern.base':'{{#label}} harus dimulai dengan +628',
+        'string.min':'{{#label}} minimal {{#limit}} digit',
+        'string.max':'{{#label}} maksimal {{#limit}} digit'
     }),
 
     fullname: Joi.string()
@@ -66,3 +70,31 @@ export const registerValidSchema = Joi.object({
         'string.empty': '{{#label}} tidak boleh string kosong'
     }
 }).with('password', 'repeat_password')
+
+
+
+// Login Request Body Validation
+export const loginValidSchema = Joi.object({
+    phone_num: Joi.string()
+    .label('Nomor Telepon')
+    .pattern(/^\+628/)
+    .min(7)   //phone must start with +628, min 7
+    .max(15)
+    .required()
+    .messages({
+        'string.pattern.base':'{{#label}} harus dimulai dengan +628',
+        'string.min':'{{#label}} minimal {{#limit}} digit',
+        'string.max':'{{#label}} maksimal {{#limit}} digit'
+    }),
+
+    password: Joi.string()
+    .label('Kata Sandi')
+    .min(8)
+    .required(),
+}).prefs({
+    messages:{
+        'string.base':'{{#label}} harus string',
+        'any.required':'{{#label}} tidak boleh kosong',
+        'string.empty': '{{#label}} tidak boleh string kosong'
+    }
+})

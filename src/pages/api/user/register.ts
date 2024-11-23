@@ -1,19 +1,22 @@
 import { respond } from "@/utils/resJson";
 import { NextApiRequest, NextApiResponse } from "next";
 import { registerValidSchema } from "./validation.schema";
-import { PrismaClient } from "@prisma/client";
 import * as bcrypt from 'bcrypt'
-const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient({
+    omit: {
+      user: {
+        password: true
+      }
+    }
+})
 export default async function handler(
     req:NextApiRequest,
     res:NextApiResponse
 ){
     try {
-        if(req.method == 'GET'){
-            const dataUser = await prisma.user.findMany();
-            respond(200, false, "Here", dataUser, res);
-        }else if(req.method != 'POST'){
-            respond(405, true, "Method Forbidden", null, res);
+        if(req.method != 'POST'){
+            respond(405, true, "Metode Dilarang", null, res);
         }
 
         const validationResult = registerValidSchema.validate(req.body);
@@ -25,9 +28,13 @@ export default async function handler(
 
         const reqData = validationResult.value;
 
-        const user = await prisma.user.findUnique({where:{email: reqData.email}})
-        if(user){
-            return respond(409, false, "Email Already Existed", null, res);
+        const isExistbyEmail = await prisma.user.findUnique({where:{email: reqData.email}})
+        const isExistbyPhone_num = await prisma.user.findUnique({where:{phone_num:reqData.phone_num}})
+        if(isExistbyEmail){
+            return respond(409, false, "Email sudah digunakan", null, res);
+        }
+        if(isExistbyPhone_num){
+            return respond(409, false, "Nomor Telepon sudah digunakan", null, res);
         }
         
         const salt = await bcrypt.genSalt(10);
@@ -38,9 +45,9 @@ export default async function handler(
         delete reqData.repeat_password;
 
         await prisma.user.create({data:reqData});
-        return respond(200, false, "Register Success", null, res);
+        return respond(200, false, "Daftar Berhasil", null, res);
     } catch (error) {
         console.log(error);
-        respond(500,true,"Internal Server Error.",null,res);
+        respond(500,true,"Kesalahan Server.",null,res);
     }
 }
