@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
+import { parseDate } from '@internationalized/date';
+
+import { DatePicker, Select, SelectItem } from '@nextui-org/react';
 
 import Header from '../_shared/Header';
 import Footer from '../_shared/Footer';
 import WrapperComponent from '../_shared/Wrapper';
 import WhatsappFloat from '../_shared/WhatsappFloating';
-
-import { MenuItem, Select, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { FiSearch, FiUser } from 'react-icons/fi';
 import {
@@ -17,6 +17,14 @@ import {
 } from 'react-icons/md';
 
 export default function BookingClassComponent() {
+  const [selectedDate, setSelectedDate] = useState(
+    parseDate(dayjs().format('YYYY-MM-DD'))
+  );
+  const handleDateChange = (newDate: any) => {
+    setSelectedDate(newDate);
+  };
+  const [SelectedOption, setSelectedOption] = useState(undefined);
+
   const ClassCard = () => {
     return (
       <div className='border-2 border-main w-full h-fit p-6 rounded-md flex flex-col gap-2'>
@@ -52,6 +60,7 @@ export default function BookingClassComponent() {
       </div>
     );
   };
+
   return (
     <>
       <Header />
@@ -60,70 +69,39 @@ export default function BookingClassComponent() {
         <div className='flex flex-col md:flex-row gap-12 mt-12'>
           <div className='flex flex-col gap-6 w-full md:max-w-[268px] h-fit bg-main text-white rounded-md p-6'>
             <div>
-              <div className='text-xl mb-2'>Pilih Tanggal :</div>
+              <div className='text-base mb-2'>Pilih Tanggal :</div>
               <DatePicker
-                className='w-full'
-                format='DD, MMMM YYYY'
-                defaultValue={dayjs(new Date())}
-                slots={{
-                  textField: (textFieldProps) => (
-                    <TextField
-                      {...textFieldProps}
-                      sx={{
-                        svg: {
-                          color: 'white',
-                        },
-                        input: {
-                          color: 'white',
-                        },
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': {
-                            borderColor: 'white',
-                          },
-                          '&:hover fieldset': {
-                            borderColor: 'white',
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'white',
-                          },
-                        },
-                      }}
-                    />
-                  ),
+                classNames={{
+                  input: 'text-2xl',
                 }}
+                defaultValue={selectedDate}
+                value={selectedDate}
+                onChange={handleDateChange}
               />
             </div>
             <div>
-              <div className='text-xl mb-2'>Pilih Kategori :</div>
+              <div className='text-base mb-2'>Pilih Kategori :</div>
               <Select
-                className=' h-[48px] w-full'
-                sx={{
-                  color: 'white',
-                  '.MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'white',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'white',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'white',
-                  },
-                  '.MuiSvgIcon-root ': {
-                    fill: 'white !important',
-                  },
-                }}
-                onChange={(e: any) => {
-                  console.log(e);
-                }}
+                defaultSelectedKeys={SelectedOption}
+                onChange={(e: any) => setSelectedOption(e.target.value)}
+                placeholder='Pilih opsi'
               >
-                <MenuItem value={'yoga-matras'}>Yoga Matras</MenuItem>
-                <MenuItem value={'yoga-aerial'}>Yoga Aerial</MenuItem>
-                <MenuItem value={'trx'}>TRX</MenuItem>
-                <MenuItem value={'muaythai'}>Muaythai</MenuItem>
+                <SelectItem key='option1' value='yoga-matras'>
+                  Yoga Matras
+                </SelectItem>
+                <SelectItem key='option2' value='yoga-aerial'>
+                  Yoga Aerial
+                </SelectItem>
+                <SelectItem key='option3' value='trx'>
+                  TRX
+                </SelectItem>
+                <SelectItem key='option4' value='muaythai'>
+                  Muaythai
+                </SelectItem>
               </Select>
             </div>
             <div>
-              <button className='w-full bg-main text-white border-2 border-white py-2 px-6 mt-2 text-xl rounded flex gap-4 items-center justify-center'>
+              <button className='w-full bg-main text-white border-2 border-white py-2 px-6 mt-2 text-base rounded flex gap-2 items-center justify-center'>
                 <FiSearch /> Cari Kelas
               </button>
             </div>
