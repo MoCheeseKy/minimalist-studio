@@ -10,7 +10,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
     try {
-        if(req.method != 'POST'){
+      console.log(req.method);
+      if(req.method != 'POST'){
           return respond(405, true, "Method Forbidden", null, res);
         }
         const validationResult = await loginValidSchema.validate(req.body);
