@@ -1,9 +1,13 @@
 -- CreateEnum
-CREATE TYPE "Gender" AS ENUM ('Pria', 'Perempuan');
+CREATE TYPE "Gender" AS ENUM ('PRIA', 'WANITA');
+
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER', 'SUPERADMIN');
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "phone_num" TEXT NOT NULL,
     "fullname" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -11,6 +15,7 @@ CREATE TABLE "User" (
     "instagram" TEXT NOT NULL,
     "birth_date" TIMESTAMP(3) NOT NULL,
     "quota" INTEGER NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'ADMIN',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -68,6 +73,9 @@ CREATE TABLE "User_Class" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_phone_num_key" ON "User"("phone_num");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
