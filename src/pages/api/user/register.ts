@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt'
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({
     omit: {
-      user: {
+      user: {   
         password: true
       }
     }
@@ -16,14 +16,14 @@ export default async function handler(
 ){
     try {
         if(req.method != 'POST'){
-            respond(405, true, "Metode Dilarang", null, res);
+            return respond(405, true, "Metode Dilarang", null, res);
         }
 
         const validationResult = registerValidSchema.validate(req.body);
 
         if(validationResult.error){
-            const errorMessage = validationResult.error.details.map((err => err.message));
-            respond(400,true,errorMessage,null,res);
+            const errorMessage = validationResult.error.details.map((err => err.message))[0];
+            return respond(400,true,errorMessage,null,res);
         }
 
         const reqData = validationResult.value;
@@ -48,6 +48,6 @@ export default async function handler(
         return respond(200, false, "Daftar Berhasil", null, res);
     } catch (error) {
         console.log(error);
-        respond(500,true,"Kesalahan Server.",null,res);
+        return respond(500,true,"Internal Server Error",null,res);
     }
 }

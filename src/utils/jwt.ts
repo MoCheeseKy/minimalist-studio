@@ -20,3 +20,8 @@ export async function sign(userId:string, fullname:string, role:string): Promise
         }
     })
 }
+
+
+export async function jwtVerify(token:string) {
+    
+}

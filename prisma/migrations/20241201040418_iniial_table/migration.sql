@@ -12,7 +12,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "gender" "Gender" NOT NULL,
-    "instagram" TEXT NOT NULL,
+    "instagram" TEXT,
     "birth_date" TIMESTAMP(3) NOT NULL,
     "quota" INTEGER NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'ADMIN',
@@ -37,6 +37,7 @@ CREATE TABLE "Studio" (
 -- CreateTable
 CREATE TABLE "Class_Category" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

@@ -11,7 +11,7 @@ export default async function handler(
 ) {
     try {
         if(req.method != 'POST'){
-          respond(405, true, "Method Forbidden", null, res);
+          return respond(405, true, "Method Forbidden", null, res);
         }
         const validationResult = await loginValidSchema.validate(req.body);
         
@@ -34,7 +34,7 @@ export default async function handler(
 
         const token = await sign(user.id, user.fullname, user.role);
 
-        return respond(200, false, "Login Success", {token: token}, res);
+        return respond(200, false, "Login Success", {token: token, role:reqData.role}, res);
     } catch (error) {
         console.log(error)
         return respond(500, true, "Internal Server Error", null, res);        

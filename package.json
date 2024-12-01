@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "local": "dotenv -e .env.local -- next dev",
+    "prod": "dotenv -e .env.production -- next dev",
+    "migrate-local": "dotenv -e .env.local -- npx prisma migrate dev",
+    "migrate-r-local": "dotenv -e .env.local -- npx prisma migrate reset",
+    "migrate-prod": "dotenv -e .env.local -- npx prisma migrate deploy"
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.8",
