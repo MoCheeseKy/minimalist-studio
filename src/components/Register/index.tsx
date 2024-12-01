@@ -73,11 +73,11 @@ export default function RegisterComponent() {
 
   return (
     <>
-      <div className='w-creen h-fit md:h-screen flex'>
+      <div className='w-creen h-fit md:h-screen md:min-h-screen md:max-h-screen flex'>
         <div className='flex-grow bg-black'></div>
         <form
           onSubmit={handleSubmit}
-          className='w-full max-w-[464px] h-full p-16 flex flex-col justify-center items-center gap-12'
+          className='w-full max-w-[464px] h-full p-16 flex flex-col justify-center items-center gap-6'
         >
           <p className='font-bold text-2xl'>Register</p>
           <div className='flex flex-col gap-2 w-full'>
