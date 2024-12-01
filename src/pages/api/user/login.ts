@@ -12,7 +12,7 @@ export default async function handler(
     try {
       console.log(req.method);
       if(req.method != 'POST'){
-          return respond(405, true, "Method Forbidden", null, res);
+          return respond(405, true, "Method Forbidden "+req.method, null, res);
         }
         const validationResult = await loginValidSchema.validate(req.body);
         
