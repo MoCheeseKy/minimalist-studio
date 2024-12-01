@@ -34,6 +34,7 @@ export default function LoginComponent() {
       // - Mengubah state aplikasi
       // - Melakukan redirect ke halaman dashboard
     } catch (error: any) {
+      console.log(error);
       if (error.response) {
         // Respons diterima tapi dengan status error
         setError(error.response.data.message || 'Terjadi kesalahan saat login');
