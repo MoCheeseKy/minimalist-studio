@@ -33,7 +33,7 @@ export default function RegisterComponent() {
     const instagram = formData.get('instagram');
 
     try {
-      const response = await axios.post(`/api/user/register/`, {
+      const response = await axios.post(`/api/user/register`, {
         phone_num: `+${phone_num}`,
         fullname,
         birth_date: dayjs(SelectedDate)?.format('YYYY-MM-DD'),
