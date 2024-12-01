@@ -23,13 +23,10 @@ export default function LoginComponent() {
     const password = formData.get('password');
 
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/user/login`,
-        {
-          phone_num: `+${phone_num}`,
-          password,
-        }
-      );
+      const response = await axios.post(`/api/user/login`, {
+        phone_num: `+${phone_num}`,
+        password,
+      });
 
       console.log('Login berhasil:', response.data);
       // Di sini Anda bisa menangani respons sukses, misalnya:

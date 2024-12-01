@@ -33,19 +33,16 @@ export default function RegisterComponent() {
     const instagram = formData.get('instagram');
 
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/user/register`,
-        {
-          phone_num: `+${phone_num}`,
-          fullname,
-          birth_date: dayjs(SelectedDate)?.format('YYYY-MM-DD'),
-          gender: SelectedGender,
-          email,
-          password,
-          repeat_password,
-          instagram,
-        }
-      );
+      const response = await axios.post(`/api/user/register`, {
+        phone_num: `+${phone_num}`,
+        fullname,
+        birth_date: dayjs(SelectedDate)?.format('YYYY-MM-DD'),
+        gender: SelectedGender,
+        email,
+        password,
+        repeat_password,
+        instagram,
+      });
 
       console.log('Register berhasil:', response.data);
       // Di sini Anda bisa menangani respons sukses, misalnya:
