@@ -4,11 +4,16 @@ import { loginValidSchema } from './validation.schema';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { sign } from '@/utils/jwt';
+import { configDotenv } from 'dotenv';
 const prisma = new PrismaClient();
-export default async function handler(
+export default async function POST(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+    // res.setHeader('Access-Control-Allow-Origin', configDotenv); // Asal (origin) tertentu
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Metode yang diizinkan
+    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Header yang diizinkan
+
     try {
       console.log(req.method);
       if(req.method != 'POST'){
