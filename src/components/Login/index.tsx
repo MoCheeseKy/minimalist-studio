@@ -24,7 +24,7 @@ export default function LoginComponent() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/user/login',
+        `http://localhost:3000/api/user/login`,
         {
           phone_num: `+${phone_num}`,
           password,
