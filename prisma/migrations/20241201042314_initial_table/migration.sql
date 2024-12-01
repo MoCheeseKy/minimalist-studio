@@ -15,7 +15,7 @@ CREATE TABLE "User" (
     "instagram" TEXT,
     "birth_date" TIMESTAMP(3) NOT NULL,
     "quota" INTEGER NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'ADMIN',
+    "role" "Role" NOT NULL DEFAULT 'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

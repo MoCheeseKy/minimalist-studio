@@ -34,7 +34,7 @@ export default async function handler(
 
         const token = await sign(user.id, user.fullname, user.role);
 
-        return respond(200, false, "Login Success", {token: token, role:reqData.role}, res);
+        return respond(200, false, "Login Success", {'token': token, 'role': user.role}, res);
     } catch (error) {
         console.log(error)
         return respond(500, true, "Internal Server Error", null, res);        
