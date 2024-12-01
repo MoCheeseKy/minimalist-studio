@@ -6,16 +6,11 @@ import bcrypt from 'bcrypt';
 import { sign } from '@/utils/jwt';
 import { configDotenv } from 'dotenv';
 const prisma = new PrismaClient();
-export default async function POST(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-    // res.setHeader('Access-Control-Allow-Origin', configDotenv); // Asal (origin) tertentu
-    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Metode yang diizinkan
-    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Header yang diizinkan
-
     try {
-      console.log(req.method);
       if(req.method != 'POST'){
           return respond(405, true, "Method Forbidden "+req.method, null, res);
         }
@@ -29,7 +24,7 @@ export default async function POST(
         const reqData = validationResult.value;
         const user = await prisma.user.findUnique({where:{phone_num:reqData.phone_num}})
         if(!user){
-          return respond(401, false, "Nomor Telepon atau Kata Sandi salah", null, res);
+          return respond(401, true, "Nomor Telepon atau Kata Sandi salah", null, res);
         }
 
         const passwordMatched = await bcrypt.compare(reqData.password, user.password);

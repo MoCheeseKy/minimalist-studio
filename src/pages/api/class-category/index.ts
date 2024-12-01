@@ -54,7 +54,7 @@ async function getAllCategory(
         }
         const categoryData = await prisma.class_Category.findMany();
         if(categoryData.length == 0){
-            return respond(404, false, "Tidak ada Kelas Kategori", null, res);
+            return respond(404, true, "Tidak ada Kelas Kategori", null, res);
         }
     
         return respond(200, false, "Data Kategori Kelas Berhasil di dapatkan", categoryData, res);
