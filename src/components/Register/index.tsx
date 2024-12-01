@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Input } from '@nextui-org/react';
+import { Input, Radio, DatePicker } from '@nextui-org/react';
+import { RadioGroup } from '@nextui-org/react';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
@@ -8,12 +10,16 @@ export default function RegisterComponent() {
   const [IsVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!IsVisible);
 
+  const [SelectedGender, setSelectedGender] = useState('pria');
+  const [SelectedDate, setSelectedDate] = useState(null);
+  const handleDateChange = (newDate: any) => {
+    setSelectedDate(newDate);
+  };
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<String>('');
 
   const handleSubmit = async (event: any) => {
-    console.log('Test');
-
     event.preventDefault();
     setIsLoading(true);
     setError('');
@@ -24,12 +30,22 @@ export default function RegisterComponent() {
     const password = formData.get('password');
     const repeat_password = formData.get('repeat_password');
     const email = formData.get('email');
+    const instagram = formData.get('instagram');
 
     try {
-      const response = await axios.post(`${process.env.API}/user/login`, {
-        phone_num: `+${phone_num}`,
-        password,
-      });
+      const response = await axios.post(
+        `http://localhost:3000/api/user/register`,
+        {
+          phone_num: `+${phone_num}`,
+          fullname,
+          birth_date: dayjs(SelectedDate)?.format('YYYY-MM-DD'),
+          gender: SelectedGender,
+          email,
+          password,
+          repeat_password,
+          instagram,
+        }
+      );
 
       console.log('Register berhasil:', response.data);
       // Di sini Anda bisa menangani respons sukses, misalnya:
@@ -57,13 +73,13 @@ export default function RegisterComponent() {
 
   return (
     <>
-      <div className='w-creen h-screen flex'>
+      <div className='w-creen h-fit md:h-screen flex'>
         <div className='flex-grow bg-black'></div>
         <form
           onSubmit={handleSubmit}
           className='w-full max-w-[464px] h-full p-16 flex flex-col justify-center items-center gap-12'
         >
-          <p>Register</p>
+          <p className='font-bold text-2xl'>Register</p>
           <div className='flex flex-col gap-2 w-full'>
             <Input
               defaultValue=''
@@ -86,6 +102,23 @@ export default function RegisterComponent() {
               placeholder='Masukkan nama lengkap'
               isRequired
               errorMessage='Field ini wajib diisi.'
+            />
+            <RadioGroup
+              name='gender'
+              label='Jenis Kelamin'
+              value={SelectedGender}
+              onValueChange={setSelectedGender}
+              orientation='horizontal'
+            >
+              <Radio value='PRIA'>Pria</Radio>
+              <Radio value='WANITA'>Wanita</Radio>
+            </RadioGroup>
+            <DatePicker
+              variant='underlined'
+              label='Tanggal Lahir'
+              name='birth_day'
+              value={SelectedDate}
+              onChange={handleDateChange}
             />
             <Input
               defaultValue=''
@@ -134,7 +167,7 @@ export default function RegisterComponent() {
               defaultValue=''
               variant='underlined'
               name='repeat_password'
-              label='Password'
+              label='Ulangi Password'
               placeholder='Masukkan ulang password'
               type={IsVisible ? 'text' : 'password'}
               isRequired
