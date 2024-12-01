@@ -50,9 +50,12 @@ async function getAllCategory(
 ){
     try {
         if(req.method != 'GET'){
-            respond(405, true, "Method Forbidden", null, res);
+            return respond(405, true, "Method Forbidden", null, res);
         }
         const categoryData = await prisma.class_Category.findMany();
+        if(!categoryData){
+            return respond(404, false, "Class Category Belum Ada", null, res);
+        }
     
         return respond(200, false, "Data Category Kelas Berhasil di dapatkan", categoryData, res);
     } catch (error) {
