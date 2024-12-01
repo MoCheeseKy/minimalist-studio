@@ -37,7 +37,7 @@ async function createCategory(
         
         const reqData = validationResult.value
         await prisma.class_Category.create({data:reqData});
-        return respond(201, false, "Category "+reqData.name+" telah berhasil ditambahkan", null, res);
+        return respond(201, false, "Kategori "+reqData.name+" telah berhasil ditambahkan", null, res);
     } catch (error) {
         console.log(error);
         return respond(500,true,"Internal Server Error",null,res);
@@ -53,11 +53,11 @@ async function getAllCategory(
             return respond(405, true, "Method Forbidden", null, res);
         }
         const categoryData = await prisma.class_Category.findMany();
-        if(!categoryData){
-            return respond(404, false, "Class Category Belum Ada", null, res);
+        if(categoryData.length == 0){
+            return respond(404, false, "Tidak ada Kelas Kategori", null, res);
         }
     
-        return respond(200, false, "Data Category Kelas Berhasil di dapatkan", categoryData, res);
+        return respond(200, false, "Data Kategori Kelas Berhasil di dapatkan", categoryData, res);
     } catch (error) {
         console.log(error);
         return respond(500,true,"Internal Server Error",null,res); 
