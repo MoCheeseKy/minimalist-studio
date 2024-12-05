@@ -4,7 +4,6 @@ import { loginValidSchema } from './validation.schema';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { sign } from '@/utils/jwt';
-import { configDotenv } from 'dotenv';
 const prisma = new PrismaClient();
 export default async function handler(
   req: NextApiRequest,
@@ -14,7 +13,7 @@ export default async function handler(
       if(req.method != 'POST'){
           return respond(405, true, "Method Forbidden "+req.method, null, res);
         }
-        const validationResult = await loginValidSchema.validate(req.body);
+        const validationResult = loginValidSchema.validate(req.body);
         
         if(validationResult.error){
           const errorMessage = validationResult.error.details.map(err => err.message);
