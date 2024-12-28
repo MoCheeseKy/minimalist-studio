@@ -98,3 +98,28 @@ export const loginValidSchema = Joi.object({
         'string.empty': '{{#label}} tidak boleh string kosong'
     }
 })
+
+export const changePassValidSchema = Joi.object({
+    password: Joi.string()
+    .label("Kata Sandi Lama")
+    .required(),
+
+    new_password: Joi.string()
+    .label("Kata Sandi")
+    .required()
+    .min(8),
+
+    repeat_new_password: Joi.string()
+    .label('Konfirmasi Kata Sandi')
+    .valid(Joi.ref('new_password'))
+    .required()
+    .messages({
+        'any.only': '{{#label}} harus sama dengan Kata Sandi'
+    })
+}).prefs({
+    messages:{
+        'string.base':'{{#label}} harus string',
+        'any.required':'{{#label}} tidak boleh kosong',
+        'string.empty': '{{#label}} tidak boleh string kosong'
+    }
+}).with('new_password', 'repeat_new_password')
