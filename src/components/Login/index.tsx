@@ -12,8 +12,6 @@ export default function LoginComponent() {
   const [error, setError] = useState<String>('');
 
   const handleSubmit = async (event: any) => {
-    console.log('Test');
-
     event.preventDefault();
     setIsLoading(true);
     setError('');
