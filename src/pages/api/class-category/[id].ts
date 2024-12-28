@@ -48,7 +48,7 @@ async function updateCategory(
             where:{id:Number(id)},
             data:{name:validationResult.value.name}
         })
-        return respond(200, false, `Kategori id-${id} Berhasil Diperbarui`, updatedCategory, res);
+        return respond(200, false, `Kategori ${category.name} Berhasil Diperbarui`, updatedCategory, res);
     } catch (error) {
         console.log(error)
         return respond(500, true, "Internal Server Error", null, res);        
@@ -90,7 +90,7 @@ async function deleteCategory(
         if(!category){
             return respond(404, true, `Kategori id-${id} tidak ada`, null, res);
         }
-
+        
         await prisma.class_Category.delete({
             where:{id:Number(id)}
         })
