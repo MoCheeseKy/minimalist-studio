@@ -45,6 +45,12 @@ async function createClass(
         const reqData = validationResult.value
         reqData.current_slot = 0;
         reqData.max_slot = studio.capacity;
+        
+        // Set Duration
+        const {start_at, end_at} = reqData
+        const durationHour =  end_at.getHours() - start_at.getHours()
+        const durationMinutes = end_at.getMinutes() - start_at.getMinutes()
+        reqData.duration = (durationHour * 60) + durationMinutes  
 
         await prisma.class.create({
             data:reqData
@@ -76,14 +82,26 @@ async function getAllClass(
                     lt: new Date(date+"T23:59"),    // Akhir dari tanggal (23:59:59)
                 },
                 ...(category_id !== "Semua" && { category_id: Number(category_id) })
+            },select:{
+                id:true,
+                category:{select:{id:true,name:true}},
+                studio:{select:{id:true,name:true}},
+                start_at:true,
+                end_at:true,
+                duration:true,
+                description:true,
+                instructor:true,
+                current_slot:true,
+                max_slot:true,
+                req_quota:true,
             }
         });
 
         if(classes.length == 0){
             return respond(404, true, "Tidak ada Kelas yang Tersedia", null, res);
         }
-
-        return respond(200, false, "Data Kelas Berhasil di dapatkan", classes, res);
+        
+        return respond(200, false, `Data Kelas Tanggal ${date} Berhasil di dapatkan`, classes, res);
     } catch (error) {
         console.log(error);
         return respond(500,true,"Internal Server Error",null,res);
