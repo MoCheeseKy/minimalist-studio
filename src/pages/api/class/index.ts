@@ -63,7 +63,7 @@ async function getAllClass(
     res: NextApiResponse
 ){
     try {
-        const {date,category_id} = req.body
+        const {date,category_id} = req.query
         
         if(!date || !category_id){
             return respond(400, true, "Filter Date atau Id Kategori tidak boleh kosong",null, res);
