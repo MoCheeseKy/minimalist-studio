@@ -7,7 +7,6 @@ import { DatePicker, Select, SelectItem } from '@nextui-org/react';
 import Header from '../_shared/Header';
 import Footer from '../_shared/Footer';
 import WrapperComponent from '../_shared/Wrapper';
-import WhatsappFloat from '../_shared/WhatsappFloating';
 import ClassCardComponent from './classCarrd';
 
 import { FiSearch } from 'react-icons/fi';
@@ -78,7 +77,6 @@ export default function BookingClassComponent() {
           </div>
         </div>
       </WrapperComponent>
-      <WhatsappFloat />
       <Footer />
     </>
   );

@@ -10,7 +10,7 @@ export default function Header() {
   const [OpenNav, setOpenNav] = useState(false);
   const [IsLogin, setIsLogin] = useState(false);
   const LinkRoute = [
-    { label: 'Tentang', href: '/about' },
+    // { label: 'Tentang', href: '/about' },
     { label: 'Galeri', href: '/our-galery' },
     { label: 'Daftar Kelas', href: '/booking-class' },
     { label: 'Jadwal', href: '/schedule' },
