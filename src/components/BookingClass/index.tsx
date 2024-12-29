@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import { parseDate } from '@internationalized/date';
 
@@ -18,8 +19,14 @@ export default function BookingClassComponent() {
   const handleDateChange = (newDate: any) => {
     setSelectedDate(newDate);
   };
-  const [SelectedOption, setSelectedOption] = useState(undefined);
-
+  const [SelectedOption, setSelectedOption] = useState('Semua');
+  useEffect(() => {
+    axios
+      .get(`/api/class?date=${selectedDate}&category_id=${SelectedOption}`)
+      .then((ress) => {
+        console.log(ress);
+      });
+  }, [selectedDate, SelectedOption]);
   return (
     <>
       <Header />
@@ -45,16 +52,19 @@ export default function BookingClassComponent() {
                 onChange={(e: any) => setSelectedOption(e.target.value)}
                 placeholder='Pilih opsi'
               >
-                <SelectItem key='option1' value='yoga-matras'>
+                <SelectItem key='Semua' value='Semua'>
+                  Semua
+                </SelectItem>
+                <SelectItem key='yoga-matras' value='yoga-matras'>
                   Yoga Matras
                 </SelectItem>
-                <SelectItem key='option2' value='yoga-aerial'>
+                <SelectItem key='yoga-aerial' value='yoga-aerial'>
                   Yoga Aerial
                 </SelectItem>
-                <SelectItem key='option3' value='trx'>
+                <SelectItem key='trx' value='trx'>
                   TRX
                 </SelectItem>
-                <SelectItem key='option4' value='muaythai'>
+                <SelectItem key='muaythai' value='muaythai'>
                   Muaythai
                 </SelectItem>
               </Select>
