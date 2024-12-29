@@ -24,7 +24,7 @@ async function createCategory(
     res: NextApiResponse
 ){
     try {
-        const validationResult = await categoryValidSchema.validate(req.body);
+        const validationResult = categoryValidSchema.validate(req.body);
         
         if(validationResult.error){
             const errorMessage = validationResult.error.details.map(err => err.message);
@@ -47,7 +47,7 @@ async function getAllCategory(
     try {
         const categoryData = await prisma.class_Category.findMany();
         if(categoryData.length == 0){
-            return respond(404, true, "Tidak ada Kelas Kategori", null, res);
+            return respond(404, true, "Tidak ada Kelas Kategori yang Tersedia", null, res);
         }
     
         return respond(200, false, "Data Kategori Kelas Berhasil di dapatkan", categoryData, res);
