@@ -51,6 +51,7 @@ CREATE TABLE "Class" (
     "studio_id" TEXT NOT NULL,
     "start_at" TIMESTAMP(3) NOT NULL,
     "end_at" TIMESTAMP(3) NOT NULL,
+    "duration" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "instructor" TEXT NOT NULL,
     "current_slot" INTEGER NOT NULL,

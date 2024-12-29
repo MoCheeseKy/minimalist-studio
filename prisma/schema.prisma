@@ -67,6 +67,7 @@ model Class{
   studio_id     String
   start_at      DateTime //format example = 1998-12-24T06:22:33.444Z 
   end_at        DateTime //format example = 1998-12-24T06:22:33.444Z
+  duration      Int
   description   String
   instructor    String  
   current_slot  Int
