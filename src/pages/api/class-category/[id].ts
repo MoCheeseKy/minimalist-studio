@@ -27,7 +27,9 @@ async function updateCategory(
 ) {
     try {
         const {id}= req.query
-
+        if(!id){
+            return respond(400, true, "Id harus disertakan", null, res)
+        }
         const category = await prisma.class_Category.findUnique(
             {where:{id:Number(id)}}
         );
@@ -61,7 +63,9 @@ async function getByIdCategory(
 ) {
    try {
         const {id} = req.query
-
+        if(!id){
+            return respond(400, true, "Id harus disertakan", null, res)
+        }
         const category = await prisma.class_Category.findUnique(
             {where:{id:Number(id)}}
         );
@@ -83,7 +87,9 @@ async function deleteCategory(
 ) {
    try {
         const {id} = req.query
-
+        if(!id){
+            return respond(400, true, "Id harus disertakan", null, res)
+        }
         const category = await prisma.class_Category.findUnique(
             {where:{id:Number(id)}}
         );

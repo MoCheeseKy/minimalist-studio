@@ -23,6 +23,9 @@ export default async function handler(
 async function updateStudio(req: NextApiRequest, res: NextApiResponse) {
     try {
         const {id} = req.query
+        if(!id){
+            return respond(400, true, "Id harus disertakan", null, res)
+        }
         const studio = await prisma.studio.findUnique({where:{id:String(id)}})
         if(!studio){
             return respond(404, true, `Studio id-${id} tidak ada`, null, res)
@@ -48,6 +51,9 @@ async function updateStudio(req: NextApiRequest, res: NextApiResponse) {
 async function getByIdStudio(req: NextApiRequest, res: NextApiResponse) {
     try {
         const {id} = req.query
+        if(!id){
+            return respond(400, true, "Id harus disertakan", null, res)
+        }
         const studio = await prisma.studio.findUnique({where:{id:String(id)}})
         if(!studio){
             return respond(404, true, `Studio id-${id} tidak ada`, null, res);
@@ -63,6 +69,9 @@ async function getByIdStudio(req: NextApiRequest, res: NextApiResponse) {
 async function deleteStudio(req: NextApiRequest, res: NextApiResponse) {
     try {
         const {id} = req.query
+        if(!id){
+            return respond(400, true, "Id harus disertakan", null, res)
+        }
         const studio = await prisma.studio.findUnique({where:{id:String(id)}})
         if(!studio){
             return respond(404, true, `Studio id-${id} tidak ada`, null, res);
