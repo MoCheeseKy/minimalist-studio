@@ -81,6 +81,7 @@ async function getAllClass(
                     gte: new Date(date+"T00:00"), // Awal dari tanggal (00:00)
                     lt: new Date(date+"T23:59"),    // Akhir dari tanggal (23:59:59)
                 },
+                //Jika category Id bukan bernilai "Semua" maka where mencari dengan key category_id juga
                 ...(category_id !== "Semua" && { category_id: Number(category_id) })
             },select:{
                 id:true,
