@@ -3,14 +3,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { registerValidSchema } from "./validation.schema";
 import * as bcrypt from 'bcrypt'
 import { PrismaClient } from "@prisma/client";
-import { prisma } from '@/pages/_app';
-// const prismaregister = new PrismaClient({
-//     omit: {
-//       user: {   
-//         password: true
-//       }
-//     }
-// })
+const prisma = new PrismaClient({
+    omit: {
+      user: {   
+        password: true
+      }
+    }
+})
 export default async function handler(
     req:NextApiRequest,
     res:NextApiResponse
