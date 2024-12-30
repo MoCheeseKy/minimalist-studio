@@ -38,7 +38,7 @@ model User{
   role        Role  @default(USER)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  user_class  User_Class[]
+  user_class  User_Class[] 
 }
 
 model Studio {
@@ -75,13 +75,13 @@ model Class{
   req_quota     Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  user_class    User_Class?
+  user_class    User_Class[]
 }
 
 model User_Class{
-  class       Class @relation(fields: [class_id], references: [id])
+  class       Class @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   class_id    String @id @unique
-  user        User  @relation(fields: [user_id], references: [id])
+  user        User  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user_id     String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
