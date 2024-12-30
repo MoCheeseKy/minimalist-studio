@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient } from '@prisma/client';
 import { respond } from '@/utils/resJson';
 import { classValidSchema } from './validation.schema';
-import { toZonedTime } from 'date-fns-tz';
-const prisma = new PrismaClient();
+import { prisma } from '@/pages/_app';
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,12 +9,13 @@ export default async function handler(
 ) {
     switch (req.method) {
         case 'POST':
-            return await createClass(req, res);
+            await createClass(req, res);
         case 'GET':
-            return await getAllClass(req, res);
+            await getAllClass(req, res);
         default:
-            return respond(405, true, "Method Forbidden", null, res);
+            respond(405, true, "Method Forbidden", null, res);
     }
+    await prisma.$disconnect()
 }
 
 async function createClass(
@@ -101,7 +100,7 @@ async function getAllClass(
         if(classes.length == 0){
             return respond(404, true, "Tidak ada Kelas yang Tersedia", null, res);
         }
-        
+        await prisma.$disconnect()
         return respond(200, false, `Data Kelas Tanggal ${date} Berhasil di dapatkan`, classes, res);
     } catch (error) {
         console.log(error);

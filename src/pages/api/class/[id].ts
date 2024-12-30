@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient } from '@prisma/client';
 import { respond } from '@/utils/resJson';
 import { classUpdateValidSchema } from './validation.schema';
-import { error } from 'console';
-const prisma = new PrismaClient();
+import { prisma } from '@/pages/_app';
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,14 +9,15 @@ export default async function handler(
 ) {
     switch (req.method) {
         case 'PUT':
-            return await updateClass(req, res);
+            await updateClass(req, res);
         case 'GET':
-            return await getByIdClass(req, res);
+            await getByIdClass(req, res);
         case 'DELETE':
-            return await deleteClass(req, res);
+            await deleteClass(req, res);
         default:
-            return respond(405, true, "Method Forbidden", null, res);
+            respond(405, true, "Method Forbidden", null, res);
     }
+    await prisma.$disconnect()
 }
 
 async function getByIdClass(
@@ -139,7 +138,7 @@ async function deleteClass(
                 increment:YogaClass.req_quota
             }}
         })
-        
+
         return respond(200, false, `Kelas id-${id} Berhasil Dihapus`, null, res)
     } catch (error) {
         console.log(error)

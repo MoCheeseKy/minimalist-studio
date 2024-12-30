@@ -2,7 +2,7 @@ import { respond } from "@/utils/resJson";
 import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { studioValidSchema } from "./validation.schema";
-const prisma = new PrismaClient();
+import { prisma } from '@/pages/_app';
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,12 +11,13 @@ export default async function handler(
 
     switch (req.method) {
         case 'POST':
-            return await createStudio(req, res);
+             await createStudio(req, res);
         case 'GET':
-            return await getAllStudio(req, res);
+             await getAllStudio(req, res);
         default:
-            return respond(405, true, "Method Forbidden", null, res);
+             respond(405, true, "Method Forbidden", null, res);
     }
+    await prisma.$disconnect()
 }
 
 async function createStudio(

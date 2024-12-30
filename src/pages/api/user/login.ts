@@ -4,7 +4,7 @@ import { loginValidSchema } from './validation.schema';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { sign } from '@/utils/jwt';
-const prisma = new PrismaClient();
+import { prisma } from '@/pages/_app';
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -38,5 +38,7 @@ export default async function handler(
     } catch (error) {
         console.log(error)
         return respond(500, true, "Internal Server Error", null, res);        
+    }finally{
+      await prisma.$disconnect()
     }
 }

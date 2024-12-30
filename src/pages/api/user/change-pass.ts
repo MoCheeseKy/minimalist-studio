@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 import jwt, { JwtPayload } from "jsonwebtoken"
 import dotenv from "dotenv"
 dotenv.config()
-const prisma = new PrismaClient();
+import { prisma } from '@/pages/_app';
 const secret : jwt.Secret = process.env.SECRET || "yb8c7b*&@Y#*&!"
 export default async function handler(
     req: NextApiRequest,
@@ -56,5 +56,7 @@ export default async function handler(
     } catch (error) {
         console.log(error);
         return respond(500,true,"Internal Server Error",null,res);
+    }finally{
+        await prisma.$disconnect()
     }
 }

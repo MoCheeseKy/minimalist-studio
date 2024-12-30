@@ -2,23 +2,22 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client';
 import { respond } from '@/utils/resJson';
 import { categoryValidSchema } from './validation.schema';
-import { error } from 'console';
-const prisma = new PrismaClient();
-
+import { prisma } from '@/pages/_app';
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     switch (req.method) {
         case 'PUT':
-            return await updateCategory(req, res);
+             await updateCategory(req, res);
         case 'GET':
-            return await getByIdCategory(req, res);
+             await getByIdCategory(req, res);
         case 'DELETE':
-            return await deleteCategory(req, res);
+             await deleteCategory(req, res);
         default:
-            return respond(405, true, "Method Forbidden", null, res);
+             respond(405, true, "Method Forbidden", null, res);
     }
+    await prisma.$disconnect()
 }
 
 async function updateCategory(

@@ -1,22 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { respond } from '@/utils/resJson';
 import { categoryValidSchema } from './validation.schema';
-import { error } from 'console';
-const prisma = new PrismaClient();
-
+import { prisma } from '@/pages/_app';
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   switch (req.method) {
     case 'POST':
-      return await createCategory(req, res);
+       await createCategory(req, res);
     case 'GET':
-      return await getAllCategory(req, res);
+       await getAllCategory(req, res);
     default:
-      return respond(405, true, 'Method Forbidden', null, res);
+       respond(405, true, 'Method Forbidden', null, res);
   }
+  await prisma.$disconnect()
 }
 
 async function createCategory(req: NextApiRequest, res: NextApiResponse) {
