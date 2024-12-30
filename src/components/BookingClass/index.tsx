@@ -13,20 +13,35 @@ import ClassCardComponent from './classCarrd';
 import { FiSearch } from 'react-icons/fi';
 
 export default function BookingClassComponent() {
+  const [Categories, setCategories] = useState([]);
+  const [Class, setClass] = useState([]);
+  const [SelectedOption, setSelectedOption] = useState('Semua');
   const [selectedDate, setSelectedDate] = useState(
     parseDate(dayjs().format('YYYY-MM-DD'))
   );
   const handleDateChange = (newDate: any) => {
     setSelectedDate(newDate);
   };
-  const [SelectedOption, setSelectedOption] = useState('Semua');
+
+  // Get CLASS
   useEffect(() => {
     axios
-      .get(`/api/class?date=${selectedDate}&category_id=${SelectedOption}`)
-      .then((ress) => {
+      .get(`/api/class?date=${selectedDate}&category_id=1`)
+      .then((ress: any) => {
         console.log(ress);
+        setCategories(ress);
       });
+  }, []);
+  //
+  // GET CLASS CATEGORY
+  useEffect(() => {
+    axios.get(`/api/class-category`).then((ress: any) => {
+      console.log('Rifky Anak Baik : ', ress);
+      setClass(ress?.data);
+    });
   }, [selectedDate, SelectedOption]);
+  //
+
   return (
     <>
       <Header />
