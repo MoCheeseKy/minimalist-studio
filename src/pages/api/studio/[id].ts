@@ -24,12 +24,12 @@ export default async function handler(
 async function updateStudio(req: NextApiRequest, res: NextApiResponse) {
     try {
         const {id} = req.query
-        if(!id){
-            return respond(400, true, "Id harus disertakan", null, res)
-        }
+    if(!id){
+        return respond(400, true, "Id harus disertakan", null, res)
+    }
         const studio = await prisma.studio.findUnique({where:{id:String(id)}})
         if(!studio){
-            return respond(404, true, `Studio id-${id} tidak ada`, null, res)
+            return respond(200, false, `Studio id-${id} tidak ada`, null, res)
         }
         const validationResult = studioUpdateValidSchema.validate(req.body);
         if(validationResult.error){
@@ -57,7 +57,7 @@ async function getByIdStudio(req: NextApiRequest, res: NextApiResponse) {
         }
         const studio = await prisma.studio.findUnique({where:{id:String(id)}})
         if(!studio){
-            return respond(404, true, `Studio id-${id} tidak ada`, null, res);
+            return respond(200, false, `Studio id-${id} tidak ada`, null, res);
         }
 
         return respond(200, false, `kategori id-${id} Berhasil Ditemukan`, studio, res);
@@ -75,7 +75,7 @@ async function deleteStudio(req: NextApiRequest, res: NextApiResponse) {
         }
         const studio = await prisma.studio.findUnique({where:{id:String(id)}})
         if(!studio){
-            return respond(404, true, `Studio id-${id} tidak ada`, null, res);
+            return respond(200, false, `Studio id-${id} tidak ada`, null, res);
         }
         await prisma.studio.delete({where:{id:String(id)}});
         return respond(200, false, `Studio id-${id} Berhasil Dihapus`, null, res);

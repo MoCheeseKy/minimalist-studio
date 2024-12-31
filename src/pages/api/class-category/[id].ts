@@ -34,7 +34,7 @@ async function updateCategory(
         );
         
         if(!category){
-            return respond(404, true, `Kategori id-${id} tidak ada`, null, res);
+            return respond(200, false, `Kategori id-${id} tidak ada`, null, res);
         }
 
         const validationResult = categoryValidSchema.validate(req.body);
@@ -70,7 +70,7 @@ async function getByIdCategory(
         );
         
         if(!category){
-            return respond(404, true, `Kategori id-${id} tidak ada`, null, res);
+            return respond(200, false, `Kategori id-${id} tidak ada`, null, res);
         }
 
         return respond(200, false, `Kategori id-${id} Berhasil Ditemukan`, category, res);
@@ -93,7 +93,7 @@ async function deleteCategory(
             {where:{id:Number(id)}}
         );
         if(!category){
-            return respond(404, true, `Kategori id-${id} tidak ada`, null, res);
+            return respond(200, false, `Kategori id-${id} tidak ada`, null, res);
         }
         
         await prisma.class_Category.delete({

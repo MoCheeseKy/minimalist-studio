@@ -53,7 +53,7 @@ async function getByIdClass(
             }
         })
         if(!yogaClass){
-            return respond(404, true, `Kelas Yoga id-${id} tidak ada`, null, res)
+            return respond(200, false, `Kelas Yoga id-${id} tidak ada`, null, res)
         }
 
         return respond(200, false, `Kelas Yoga id-${id} Berhasil Didapatkan`, yogaClass, res)
@@ -77,7 +77,7 @@ async function updateClass(
              where:{id:String(id)}
         })
         if(!unUpdatedClass){
-            return respond(404, true, `Kategori id-${id} tidak ada`, null, res);
+            return respond(200, false, `Kategori id-${id} tidak ada`, null, res);
         }
         
         const validationResult = classUpdateValidSchema.validate(req.body)
@@ -119,7 +119,7 @@ async function deleteClass(
             where:{id:String(id)}
         })
         if(!YogaClass){
-            return respond(404, true, `Kelas id-${id} tidak ada`, null, res);
+            return respond(200, false, `Kelas id-${id} tidak ada`, null, res);
         }
         
         await prisma.user_Class.deleteMany({

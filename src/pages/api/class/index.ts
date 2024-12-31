@@ -32,13 +32,13 @@ async function createClass(
         const category_id = validationResult.value.category_id
         const category = await prisma.class_Category.findUnique({where:{id:category_id}})
         if(!category){
-            return respond(404, true, `Kategori id-${category_id} tidak ada`, null, res);
+            return respond(200, false, `Kategori id-${category_id} tidak ada`, null, res);
         }
         
         const studio_id = validationResult.value.studio_id
         const studio = await prisma.studio.findUnique({where:{id:studio_id}})
         if(!studio){
-            return respond(404, true, `Studio id-${studio_id} tidak ada`, null, res);
+            return respond(200, false, `Studio id-${studio_id} tidak ada`, null, res);
         }
         
         const reqData = validationResult.value
@@ -98,7 +98,7 @@ async function getAllClass(
         });
 
         if(classes.length == 0){
-            return respond(404, true, "Tidak ada Kelas yang Tersedia", null, res);
+            return respond(200, false, "Tidak ada Kelas yang Tersedia", null, res);
         }
         await prisma.$disconnect()
         return respond(200, false, `Data Kelas Tanggal ${date} Berhasil di dapatkan`, classes, res);

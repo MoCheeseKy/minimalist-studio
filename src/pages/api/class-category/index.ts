@@ -48,7 +48,7 @@ async function getAllCategory(req: NextApiRequest, res: NextApiResponse) {
     const categoryData = await prisma.class_Category.findMany();
     if (categoryData.length == 0) {
       return respond(
-        404,
+        200,
         true,
         'Tidak ada Kelas Kategori yang Tersedia',
         null,

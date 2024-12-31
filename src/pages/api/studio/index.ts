@@ -48,7 +48,7 @@ async function getAllStudio(
     try {
         const studioData = await prisma.studio.findMany();
         if(studioData.length == 0){
-            return respond(404, true, "Tidak ada Studio yang tersedia", null, res);
+            return respond(200, false, "Tidak ada Studio yang tersedia", null, res);
         }
 
         return respond(200, false, "Data Studio Berhasil di dapatkan", studioData, res)
