@@ -39,6 +39,7 @@ model User{
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user_class  User_Class[] 
+  transaction_history Transaction[]
 }
 
 model Studio {
@@ -76,6 +77,14 @@ model Class{
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   user_class    User_Class[]
+}
+
+model Transaction{
+  id            String @id @unique @default(uuid())
+  user          User @relation(fields: [user_id], references: [id])
+  user_id       String
+  quota_amount  Int
+  createdAt     DateTime
 }
 
 model User_Class{

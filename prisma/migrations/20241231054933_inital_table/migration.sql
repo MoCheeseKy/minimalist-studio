@@ -64,6 +64,16 @@ CREATE TABLE "Class" (
 );
 
 -- CreateTable
+CREATE TABLE "Transaction" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "quota_amount" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "User_Class" (
     "class_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -92,6 +102,9 @@ CREATE UNIQUE INDEX "Class_Category_id_key" ON "Class_Category"("id");
 CREATE UNIQUE INDEX "Class_id_key" ON "Class"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Transaction_id_key" ON "Transaction"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_Class_class_id_key" ON "User_Class"("class_id");
 
 -- AddForeignKey
@@ -101,7 +114,10 @@ ALTER TABLE "Class" ADD CONSTRAINT "Class_category_id_fkey" FOREIGN KEY ("catego
 ALTER TABLE "Class" ADD CONSTRAINT "Class_studio_id_fkey" FOREIGN KEY ("studio_id") REFERENCES "Studio"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "User_Class" ADD CONSTRAINT "User_Class_class_id_fkey" FOREIGN KEY ("class_id") REFERENCES "Class"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "User_Class" ADD CONSTRAINT "User_Class_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User_Class" ADD CONSTRAINT "User_Class_class_id_fkey" FOREIGN KEY ("class_id") REFERENCES "Class"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User_Class" ADD CONSTRAINT "User_Class_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
