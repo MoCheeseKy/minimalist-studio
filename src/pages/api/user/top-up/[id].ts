@@ -22,6 +22,7 @@ export default async function handler(
             return respond(400, true, "add_quota harus berupa angka", null, res)
         }
 
+        const transactionAt = format(Date.now(), "yyyy-MM-dd'T'HH:mm:ss'Z'", {timeZone: 'Asia/Jakarta'})
         const [updatedUser, createdTransaction] = await prisma.$transaction([
             prisma.user.update({
                 where:{id:String(id)},
@@ -35,7 +36,7 @@ export default async function handler(
                 data:{
                     user_id: String(id),
                     quota_amount: add_quota,
-                    createdAt: new Date()
+                    createdAt: transactionAt
                 }
             })
         ])
