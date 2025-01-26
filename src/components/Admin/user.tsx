@@ -46,7 +46,7 @@ export default function UserComponent() {
 
   function DataFetch() {
     axios.get(`/api/user`).then((ress: any) => {
-      setUsers(ress?.data?.data);
+      setUsers(ress?.data?.data || []);
     });
   }
 
@@ -151,8 +151,8 @@ export default function UserComponent() {
           )}
         </TableHeader>
         <TableBody items={items}>
-          {(item) => (
-            <TableRow key={item.key}>
+          {(item: any) => (
+            <TableRow key={item?.key}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}

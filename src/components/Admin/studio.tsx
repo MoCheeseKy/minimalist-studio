@@ -1,4 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
+
 import {
   Table,
   TableHeader,
@@ -9,205 +11,134 @@ import {
   Pagination,
   getKeyValue,
   Input,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalProps,
+  useDisclosure,
 } from '@nextui-org/react';
 
 import { IoIosSearch } from 'react-icons/io';
 
-export const studios = [
-  {
-    key: '1',
-    name: 'Tony Reichert',
-    role: 'CEO',
-    status: 'Active',
-  },
-  {
-    key: '2',
-    name: 'Zoey Lang',
-    role: 'Technical Lead',
-    status: 'Paused',
-  },
-  {
-    key: '3',
-    name: 'Jane Fisher',
-    role: 'Senior Developer',
-    status: 'Active',
-  },
-  {
-    key: '4',
-    name: 'William Howard',
-    role: 'Community Manager',
-    status: 'Vacation',
-  },
-  {
-    key: '5',
-    name: 'Emily Collins',
-    role: 'Marketing Manager',
-    status: 'Active',
-  },
-  {
-    key: '6',
-    name: 'Brian Kim',
-    role: 'Product Manager',
-    status: 'Active',
-  },
-  {
-    key: '7',
-    name: 'Laura Thompson',
-    role: 'UX Designer',
-    status: 'Active',
-  },
-  {
-    key: '8',
-    name: 'Michael Stevens',
-    role: 'Data Analyst',
-    status: 'Paused',
-  },
-  {
-    key: '9',
-    name: 'Sophia Nguyen',
-    role: 'Quality Assurance',
-    status: 'Active',
-  },
-  {
-    key: '10',
-    name: 'James Wilson',
-    role: 'Front-end Developer',
-    status: 'Vacation',
-  },
-  {
-    key: '11',
-    name: 'Ava Johnson',
-    role: 'Back-end Developer',
-    status: 'Active',
-  },
-  {
-    key: '12',
-    name: 'Isabella Smith',
-    role: 'Graphic Designer',
-    status: 'Active',
-  },
-  {
-    key: '13',
-    name: 'Oliver Brown',
-    role: 'Content Writer',
-    status: 'Paused',
-  },
-  {
-    key: '14',
-    name: 'Lucas Jones',
-    role: 'Project Manager',
-    status: 'Active',
-  },
-  {
-    key: '15',
-    name: 'Grace Davis',
-    role: 'HR Manager',
-    status: 'Active',
-  },
-  {
-    key: '16',
-    name: 'Elijah Garcia',
-    role: 'Network Administrator',
-    status: 'Active',
-  },
-  {
-    key: '17',
-    name: 'Emma Martinez',
-    role: 'Accountant',
-    status: 'Vacation',
-  },
-  {
-    key: '18',
-    name: 'Benjamin Lee',
-    role: 'Operations Manager',
-    status: 'Active',
-  },
-  {
-    key: '19',
-    name: 'Mia Hernandez',
-    role: 'Sales Manager',
-    status: 'Paused',
-  },
-  {
-    key: '20',
-    name: 'Daniel Lewis',
-    role: 'DevOps Engineer',
-    status: 'Active',
-  },
-  {
-    key: '21',
-    name: 'Amelia Clark',
-    role: 'Social Media Specialist',
-    status: 'Active',
-  },
-  {
-    key: '22',
-    name: 'Jackson Walker',
-    role: 'Customer Support',
-    status: 'Active',
-  },
-  {
-    key: '23',
-    name: 'Henry Hall',
-    role: 'Security Analyst',
-    status: 'Active',
-  },
-  {
-    key: '24',
-    name: 'Charlotte Young',
-    role: 'PR Specialist',
-    status: 'Paused',
-  },
-  {
-    key: '25',
-    name: 'Liam King',
-    role: 'Mobile App Developer',
-    status: 'Active',
-  },
-];
-
 export const columns = [
-  { name: 'NAME', uid: 'name' },
-  { name: 'ROLE', uid: 'role' },
-  { name: 'STATUS', uid: 'status' },
+  { name: 'Nama', uid: 'name' },
+  { name: 'Kapasitas', uid: 'capacity' },
+  { name: 'Lokasi', uid: 'location' },
   { name: 'ACTIONS', uid: 'actions' },
 ];
 
 export default function StudioComponent() {
   const [Page, setPage] = useState();
   const rowsPerPage = 10;
-  const pages = Math.ceil(studios.length / rowsPerPage);
+  const [Studios, setStudios] = useState([]);
+  const [Search, setSearch] = useState('');
+  const [SelectedStudio, setSelectedStudio] = useState<any>([]);
+  const [ModalOpen, setModalOpen] = useState('');
+  const [FormData, setFormData] = useState({
+    name: '',
+    capacity: '',
+    location: '',
+  });
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  function DataFetch() {
+    axios.get(`/api/studio`).then((ress: any) => {
+      setStudios(ress?.data?.data || []);
+    });
+  }
+
+  function AddStudio() {
+    axios
+      .post(`/api/studio`, {
+        ...FormData,
+      })
+      .then((ress) => {
+        console.log(ress);
+        DataFetch();
+        setFormData({ ...FormData, name: '', capacity: '', location: '' });
+      });
+  }
+
+  function UpdateStudio() {
+    axios
+      .put(`/api/studio/${SelectedStudio?.id}`, {
+        ...FormData,
+      })
+      .then((ress) => {
+        console.log(ress);
+        DataFetch();
+        setFormData({ ...FormData, name: '', capacity: '', location: '' });
+      });
+  }
+
+  function DeleteStudio() {
+    axios.delete(`/api/studio/${SelectedStudio?.id}`).then((ress) => {
+      console.log(ress);
+      DataFetch();
+    });
+  }
+
+  useEffect(() => {
+    DataFetch();
+  }, [Search]);
+
+  const pages = Math.ceil(Studios.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (Page ? Page - 1 : 0) * rowsPerPage;
     const end = start + rowsPerPage;
-    return studios.slice(start, end);
-  }, [Page, studios]);
-  const renderCell = useCallback((studios: any, columnKey: any) => {
-    const cellValue = studios[columnKey];
+    return Studios.slice(start, end);
+  }, [Page, Studios]);
+  const renderCell = useCallback((Studios: any, columnKey: any) => {
+    const cellValue = Studios[columnKey];
     switch (columnKey) {
-      case 'role':
+      case 'location':
         return (
-          <div className='flex flex-col'>
-            <p className='text-bold text-sm capitalize text-default-400'>
-              {studios.team}
-            </p>
-          </div>
+          <a
+            target='_blank'
+            href={`${Studios?.location}`}
+            className='flex items-center gap-2'
+          >
+            {Studios?.location}
+          </a>
         );
-      case 'status':
+      case 'capacity':
         return (
           <div className='flex items-center gap-2'>
-            <div>{studios.status}</div>
+            {Studios?.capacity} Orang
           </div>
         );
       case 'actions':
         return (
           <div className='flex items-center gap-2'>
             <button
-              onClick={() => console.log(studios)}
+              onClick={() => {
+                setSelectedStudio(Studios);
+                setFormData({
+                  ...FormData,
+                  name: Studios?.name,
+                  capacity: Studios?.capacity,
+                  location: Studios?.location,
+                });
+                setModalOpen('Edit');
+                onOpen();
+              }}
               type='submit'
               className='bg-[#9a4b2c] text-white border-2 border-[#9a4b2c] py-1 px-6 text-sm rounded w-fit'
             >
               Edit
+            </button>
+            <button
+              onClick={() => {
+                setSelectedStudio(Studios);
+                setModalOpen('Hapus');
+                onOpen();
+              }}
+              type='submit'
+              className='bg-[#9a4b2c] text-white border-2 border-[#9a4b2c] py-1 px-6 text-sm rounded w-fit'
+            >
+              Hapus
             </button>
           </div>
         );
@@ -216,16 +147,10 @@ export default function StudioComponent() {
     }
   }, []);
 
-  const [Search, setSearch] = useState('');
-
-  useEffect(() => {
-    console.log(Search);
-  }, [Search]);
-
   return (
     <>
       <p className='text-[32px] font-bold mb-12'>Studio</p>
-      <div className='flex justify-end mb-4'>
+      <div className='flex justify-end mb-4 gap-4'>
         <Input
           defaultValue=''
           variant='bordered'
@@ -238,6 +163,15 @@ export default function StudioComponent() {
             }
           }}
         />
+        <button
+          onClick={() => {
+            setModalOpen('Tambah');
+            onOpen();
+          }}
+          className='bg-[#9a4b2c] text-white border-2 border-[#9a4b2c] py-1 px-6 text-sm rounded w-fit'
+        >
+          Tambah
+        </button>
       </div>
       <Table
         bottomContent={
@@ -274,6 +208,83 @@ export default function StudioComponent() {
           )}
         </TableBody>
       </Table>
+
+      {/* MODAL */}
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                {ModalOpen} Studio
+              </ModalHeader>
+              <ModalBody>
+                {ModalOpen === 'Hapus' &&
+                  'Apakah anda yakin untuk menghapus studio ini?'}
+                {ModalOpen !== 'Hapus' && (
+                  <>
+                    <Input
+                      variant='bordered'
+                      placeholder='Masukan Nama Studio'
+                      className='max-w-[466px]'
+                      value={FormData?.name}
+                      onChange={(e: any) =>
+                        setFormData({ ...FormData, name: e?.target?.value })
+                      }
+                    />
+                    <Input
+                      variant='bordered'
+                      placeholder='Masukan Kapasitas Studio'
+                      className='max-w-[466px]'
+                      value={FormData?.capacity}
+                      onChange={(e: any) =>
+                        setFormData({ ...FormData, capacity: e?.target?.value })
+                      }
+                    />
+                    <Input
+                      variant='bordered'
+                      placeholder='Masukan Lokasi Studio'
+                      className='max-w-[466px]'
+                      value={FormData?.location}
+                      onChange={(e: any) =>
+                        setFormData({ ...FormData, location: e?.target?.value })
+                      }
+                    />
+                  </>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                <button
+                  onClick={onClose}
+                  type='submit'
+                  className=' text-main border-2 border-[#9a4b2c] py-1 px-6 text-sm rounded w-fit'
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    if (ModalOpen === 'Tambah') {
+                      AddStudio();
+                      onClose();
+                    }
+                    if (ModalOpen === 'Edit') {
+                      UpdateStudio();
+                      onClose();
+                    }
+                    if (ModalOpen === 'Hapus') {
+                      DeleteStudio();
+                      onClose();
+                    }
+                  }}
+                  type='submit'
+                  className='bg-[#9a4b2c] text-white border-2 border-[#9a4b2c] py-1 px-6 text-sm rounded w-fit'
+                >
+                  {ModalOpen}
+                </button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }
