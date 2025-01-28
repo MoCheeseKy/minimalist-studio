@@ -4,7 +4,9 @@ import dayjs from 'dayjs';
 import {
   parseDate,
   parseAbsoluteToLocal,
+  parseAbsolute,
   CalendarDateTime,
+  parseZonedDateTime,
 } from '@internationalized/date';
 
 import {
@@ -42,6 +44,7 @@ export const columns = [
   { name: 'Kapasitas', uid: 'max_slot' },
   { name: 'Sisa Kapasitas', uid: 'current_slot' },
   { name: 'Kuota', uid: 'req_quota' },
+  { name: 'Action', uid: 'actions' },
 ];
 
 export default function ClassComponent() {
@@ -204,35 +207,19 @@ export default function ClassComponent() {
     const cellValue = Classes[columnKey];
     switch (columnKey) {
       case 'category':
-        return (
-          <div className='flex flex-col'>
-            <p className='text-bold text-sm capitalize text-default-400'>
-              {Classes?.category?.name}
-            </p>
-          </div>
-        );
+        return <div className='flex flex-col'>{Classes?.category?.name}</div>;
       case 'studio':
-        return (
-          <div className='flex flex-col'>
-            <p className='text-bold text-sm capitalize text-default-400'>
-              {Classes?.studio?.name}
-            </p>
-          </div>
-        );
+        return <div className='flex flex-col'>{Classes?.studio?.name}</div>;
       case 'start_at':
         return (
           <div className='flex flex-col'>
-            <p className='text-bold text-sm capitalize text-default-400'>
-              {dayjs(Classes?.start_at).format('YYYY-MM-DD HH:mm')}
-            </p>
+            {dayjs(Classes?.start_at).format('YYYY-MM-DD HH:mm')}
           </div>
         );
       case 'end_at':
         return (
           <div className='flex flex-col'>
-            <p className='text-bold text-sm capitalize text-default-400'>
-              {dayjs(Classes?.end_at).format('YYYY-MM-DD HH:mm')}
-            </p>
+            {dayjs(Classes?.end_at).format('YYYY-MM-DD HH:mm')}
           </div>
         );
       case 'actions':
@@ -243,12 +230,45 @@ export default function ClassComponent() {
                 setSelectedStudio(Classes);
                 setFormData({
                   ...FormData,
-                  studio_id: Classes?.studio_id,
+                  studio_id: Classes?.studio?.id,
                   description: Classes?.description,
                   instructor: Classes?.instructor,
                 });
+                const startAt = [
+                  parseInt(dayjs(Classes?.start_at)?.format('YYYY')),
+                  parseInt(dayjs(Classes?.start_at)?.format('MM')),
+                  parseInt(dayjs(Classes?.start_at)?.format('DD')),
+                  parseInt(dayjs(Classes?.start_at)?.format('HH')),
+                  parseInt(dayjs(Classes?.start_at)?.format('mm')),
+                ];
+                const endAt = [
+                  parseInt(dayjs(Classes?.end_at)?.format('YYYY')),
+                  parseInt(dayjs(Classes?.end_at)?.format('MM')),
+                  parseInt(dayjs(Classes?.end_at)?.format('DD')),
+                  parseInt(dayjs(Classes?.end_at)?.format('HH')),
+                  parseInt(dayjs(Classes?.end_at)?.format('mm')),
+                ];
+                setStartAt(() => {
+                  return new CalendarDateTime(
+                    startAt[0],
+                    startAt[1] + 1,
+                    startAt[2],
+                    startAt[3],
+                    startAt[4]
+                  );
+                });
+                setEndAt(() => {
+                  return new CalendarDateTime(
+                    endAt[0],
+                    endAt[1] + 1,
+                    endAt[2],
+                    endAt[3],
+                    endAt[4]
+                  );
+                });
                 setRequirementQuota(Classes?.req_quota);
-                setModalOpen('Hapus');
+                setSelectedCategory(Classes?.category?.id);
+                setModalOpen('Edit');
                 onOpen();
               }}
               type='submit'
@@ -356,7 +376,7 @@ export default function ClassComponent() {
                 {ModalOpen !== 'Hapus' && (
                   <>
                     <Select
-                      value={SelectedCategory}
+                      defaultSelectedKeys={SelectedCategory.toString()}
                       placeholder='Pilih kategori kelas'
                     >
                       {Categories?.map((category: any, indexCategory: any) => (
@@ -370,7 +390,7 @@ export default function ClassComponent() {
                       ))}
                     </Select>
                     <Select
-                      value={FormData?.studio_id}
+                      defaultSelectedKeys={FormData?.studio_id}
                       placeholder='Pilih studio kelas'
                     >
                       {Studios?.map((studio: any, indexCategory: any) => (
