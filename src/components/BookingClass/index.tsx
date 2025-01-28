@@ -16,31 +16,30 @@ export default function BookingClassComponent() {
   const [Categories, setCategories] = useState([]);
   const [Class, setClass] = useState([]);
   const [SelectedOption, setSelectedOption] = useState('Semua');
-  const [selectedDate, setSelectedDate] = useState(
+  const [SelectedDate, setSelectedDate] = useState(
     parseDate(dayjs().format('YYYY-MM-DD'))
   );
   const handleDateChange = (newDate: any) => {
     setSelectedDate(newDate);
   };
 
-  // Get CLASS
-  useEffect(() => {
+  function getClass() {
     axios
-      .get(`/api/class?date=${selectedDate}&category_id=1`)
+      .get(`/api/class?date=${SelectedDate}&category_id=${SelectedOption}`)
       .then((ress: any) => {
-        console.log(ress);
-        setCategories(ress);
+        setClass(ress?.data?.data);
       });
-  }, []);
-  //
+  }
+
   // GET CLASS CATEGORY
   useEffect(() => {
     axios.get(`/api/class-category`).then((ress: any) => {
-      console.log('Rifky Anak Baik : ', ress);
-      setClass(ress?.data);
+      setCategories(ress?.data?.data);
+      if (SelectedOption) {
+        getClass();
+      }
     });
-  }, [selectedDate, SelectedOption]);
-  //
+  }, []);
 
   return (
     <>
@@ -55,8 +54,8 @@ export default function BookingClassComponent() {
                 classNames={{
                   input: 'text-2xl',
                 }}
-                defaultValue={selectedDate}
-                value={selectedDate}
+                defaultValue={SelectedDate}
+                value={SelectedDate}
                 onChange={handleDateChange}
               />
             </div>
@@ -67,25 +66,21 @@ export default function BookingClassComponent() {
                 onChange={(e: any) => setSelectedOption(e.target.value)}
                 placeholder='Pilih opsi'
               >
-                <SelectItem key='Semua' value='Semua'>
+                {/* <SelectItem key='Semua' value='Semua'>
                   Semua
-                </SelectItem>
-                <SelectItem key='yoga-matras' value='yoga-matras'>
-                  Yoga Matras
-                </SelectItem>
-                <SelectItem key='yoga-aerial' value='yoga-aerial'>
-                  Yoga Aerial
-                </SelectItem>
-                <SelectItem key='trx' value='trx'>
-                  TRX
-                </SelectItem>
-                <SelectItem key='muaythai' value='muaythai'>
-                  Muaythai
-                </SelectItem>
+                </SelectItem> */}
+                {Categories?.map((category: any, indexCategory: any) => (
+                  <SelectItem key={indexCategory} value={category?.id}>
+                    {category?.name}
+                  </SelectItem>
+                ))}
               </Select>
             </div>
             <div>
-              <button className='w-full bg-main text-white border-2 border-white py-2 px-6 mt-2 text-base rounded flex gap-2 items-center justify-center'>
+              <button
+                onClick={() => getClass()}
+                className='w-full bg-main text-white border-2 border-white py-2 px-6 mt-2 text-base rounded flex gap-2 items-center justify-center'
+              >
                 <FiSearch /> Cari Kelas
               </button>
             </div>

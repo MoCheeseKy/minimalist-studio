@@ -20,5 +20,19 @@ module.exports = {
     },
   },
   darkMode: 'class',
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: '#9a4b2c',
+            },
+            // Tambahkan warna kustom lainnya di sini
+          },
+        },
+        // Anda juga bisa menambahkan tema dark jika diperlukan
+      },
+    }),
+  ],
 };

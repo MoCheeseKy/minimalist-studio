@@ -2,7 +2,6 @@ import { respond } from "@/utils/resJson";
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from '@/pages/_app';
 import { format } from "date-fns-tz";
-import { Prisma } from "@prisma/client";
 
 export default async function handler(
     req: NextApiRequest,
@@ -42,13 +41,13 @@ export default async function handler(
         ])
 
         return respond(200, false, `Top-up pada user "${updatedUser.fullname}" dengan jumlah "${add_quota}" berhasil`, null, res)
-    } catch (error) {
-        if(error instanceof Prisma.PrismaClientKnownRequestError){
-            if(error.code === 'P2025'){
-                return respond(200, false, "User Tidak ditemukan", [], res)
-            }
-        }
-        console.log(error)
+    } catch (e) {
+        // if(e instanceof prisma.PrismaClientKnownRequestError){
+        //     if(e.code === 'P2025'){
+        //         return respond(200, false, "User Tidak ditemukan", [], res)
+        //     }
+        // }
+        console.log(e)
         return respond(500, true, "Internal Server Error", null, res);        
     }finally{
         await prisma.$disconnect()
